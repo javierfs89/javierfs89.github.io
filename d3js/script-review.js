@@ -60,7 +60,12 @@
   function foobar(ticker) {
     const host = window.location.host;
     const protocol = window.location.protocol;
-    return `${protocol}//${host}?ticker=${ticker}`;
+    const href = window.location.href;
+    var foobar = href.split("/")
+    foobar.pop()
+    var prefix = foobar.join("/")
+    //return `${protocol}//${host}?ticker=${ticker}`;
+    return `${prefix}/?ticker=${ticker}`;
   }
 
 }());
