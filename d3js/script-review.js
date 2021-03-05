@@ -12,6 +12,7 @@
 
     data.forEach(function(d) {
       d.sigma = +d.sigma;
+      d.sigmaTR = +d.sigmaTR;
     });
 
     var table = d3
@@ -24,7 +25,7 @@
     thead
       .append("tr")
       .selectAll("th")
-      .data(["ticker", "sigma"])
+      .data(["ticker", "sigma", "sigmaTR"])
       .enter()
       .append("th")
         .text(function(c) { return c; });
@@ -39,8 +40,9 @@
       .selectAll("td")
       .data(function(row) {
         return [
-          {column: "ticker", value: row["ticker"]},
-          {column: "sigma" , value: row["sigma"]}
+          {column: "ticker" , value: row["ticker"]},
+          {column: "sigma"  , value: row["sigma"]},
+          {column: "sigmaTR", value: row["sigmaTR"]}
         ]
       })
       .enter()
@@ -48,7 +50,7 @@
         .attr("style", "font-family: Courier")
         .html(function(d) {
           if (d.column === "ticker") {
-            return `<a href="${foobar(d.value)}" target="_blank">${d.value}</a>`;
+            return `<a href="${foobar(d.value)}" target="_blank">${d.value}</a> (<a href="${foobar(d.value)}&tr" target="_blank">tr</a>)`;
             // <a href="localhost:8123/index?ticker=itx.mc" target="_blank">mco</a>
           } else {
             return d.value;
