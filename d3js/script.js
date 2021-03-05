@@ -4,7 +4,9 @@
 
   const urlParams = new URLSearchParams(window.location.search);
   var tickerParam = urlParams.get('ticker');
+  var trParam = urlParams.get('tr');
   tickerParam = tickerParam === null ? "aapl" : tickerParam;
+  trParam = trParam === null ? false : true;
 
   var margin = {top: 30, right: 20, bottom: 100, left: 50},
     margin2  = {top: 410, right: 20, bottom: 20, left: 50},
@@ -133,7 +135,7 @@
 
   legend.append('text')
     .attr('class', 'chart__symbol')
-    .text(`NASDAQ: ${tickerParam.toUpperCase()}`)
+    .text(`NASDAQ: ${tickerParam.toUpperCase()} ${trParam ? "TR" : ""}`)
 
   var rangeSelection =  legend
     .append('g')
@@ -406,19 +408,36 @@
 //  }
 
   function type(d) {
-    return {
-      date    : d3.timeParse('%Y-%m-%d')(d.date),
-      price   : +d.close,
-      average : +d.average,
-      volume  : +50,
-      ma200   : +d.ma200,
-      sigma   : +d.sigma,
-      sigma1  : +d.ma200*(+d.average+(1*+d.sigma)),
-      sigma1M : +d.ma200*(+d.average-(1*+d.sigma)),
-      sigma2  : +d.ma200*(+d.average+(2*+d.sigma)),
-      sigma2M : +d.ma200*(+d.average-(2*+d.sigma)),
-      sigma3  : +d.ma200*(+d.average+(3*+d.sigma)),
-      sigma3M : +d.ma200*(+d.average-(3*+d.sigma))
+    if (trParam) {
+      return {
+        date    : d3.timeParse('%Y-%m-%d')(d.date),
+        price   : +d.closeTR,
+        average : +d.averageTR,
+        volume  : +50,
+        ma200   : +d.ma200TR,
+        sigma   : +d.sigmaTR,
+        sigma1  : +d.ma200TR*(+d.averageTR+(1*+d.sigmaTR)),
+        sigma1M : +d.ma200TR*(+d.averageTR-(1*+d.sigmaTR)),
+        sigma2  : +d.ma200TR*(+d.averageTR+(2*+d.sigmaTR)),
+        sigma2M : +d.ma200TR*(+d.averageTR-(2*+d.sigmaTR)),
+        sigma3  : +d.ma200TR*(+d.averageTR+(3*+d.sigmaTR)),
+        sigma3M : +d.ma200TR*(+d.averageTR-(3*+d.sigmaTR))
+      }
+    } else {
+      return {
+        date    : d3.timeParse('%Y-%m-%d')(d.date),
+        price   : +d.close,
+        average : +d.average,
+        volume  : +50,
+        ma200   : +d.ma200,
+        sigma   : +d.sigma,
+        sigma1  : +d.ma200*(+d.average+(1*+d.sigma)),
+        sigma1M : +d.ma200*(+d.average-(1*+d.sigma)),
+        sigma2  : +d.ma200*(+d.average+(2*+d.sigma)),
+        sigma2M : +d.ma200*(+d.average-(2*+d.sigma)),
+        sigma3  : +d.ma200*(+d.average+(3*+d.sigma)),
+        sigma3M : +d.ma200*(+d.average-(3*+d.sigma))
+      }
     }
   }
 
